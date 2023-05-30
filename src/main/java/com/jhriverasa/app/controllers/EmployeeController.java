@@ -55,7 +55,9 @@ public class EmployeeController {
         try{
             Optional<Employee> response = employeeRepository.findById(id);
             if (response.isPresent()){
-                return new ResponseEntity<>(response.get(), HttpStatus.OK);
+                Employee employee = response.get();
+                EmployeeResponse res = new EmployeeResponse(employee,EmployeeBusiness.calculateAnnualSalary(employee));
+                return new ResponseEntity<>(res, HttpStatus.OK);
             }else{
                 return new ResponseEntity<>(new EmptyResponse(), HttpStatus.OK);
             }
