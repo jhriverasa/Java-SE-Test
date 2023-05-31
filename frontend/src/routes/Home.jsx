@@ -3,9 +3,8 @@ import "./Home.css";
 import { useState, useEffect } from "react";
 import { TextField, Box, Button, Grid } from "@mui/material";
 
-import { axiosReq } from "../utils/req";
-import { URL_PATHS } from "../utils/constants";
 import { isValidUUID } from "../utils/utils";
+import { getAllEmployees, getEmployeeById } from "../utils/requests";
 import Layout from "../components/base/Layout";
 import EmployeeBox from "../components/EmployeeBox";
 
@@ -14,9 +13,7 @@ const Home = () => {
   const [employeeInputText, setEmployeeInputText] = useState("");
 
   useEffect(() => {
-    axiosReq({
-      reqOption: "get",
-      path: URL_PATHS.REST_API_PATH_V1 + "/employees",
+    getAllEmployees({
       onSuccess: (response) => {
         if (Array.isArray(response.data)) {
           setEmployees(response.data);
@@ -31,9 +28,7 @@ const Home = () => {
 
   useEffect(() => {
     if (employeeInputText === "") {
-      axiosReq({
-        reqOption: "get",
-        path: URL_PATHS.REST_API_PATH_V1 + "/employees",
+      getAllEmployees({
         onSuccess: (response) => {
           if (Array.isArray(response.data)) {
             setEmployees(response.data);
@@ -49,9 +44,8 @@ const Home = () => {
 
   const handleSearch = () => {
     if (isValidUUID(employeeInputText)) {
-      axiosReq({
-        reqOption: "get",
-        path: URL_PATHS.REST_API_PATH_V1 + "/employee/" + employeeInputText,
+      getEmployeeById({
+        employeeId: employeeInputText,
         onSuccess: (response) => {
           if (response.data) {
             setEmployees([response.data]);
